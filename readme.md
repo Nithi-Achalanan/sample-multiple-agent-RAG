@@ -32,6 +32,17 @@ The retrieval process can loop when the Data Retrieval Agent determines that mor
 
 ---
 
+## Ideal Graph Design
+
+In a real-world implementation, I would likely prefer a **grep-based / file-based RAG approach** for this use case. Recent research suggests that it can outperform traditional vector retrieval in several scenarios, especially when the searchable knowledge base is relatively small and well-structured.
+
+Even when using a vector database, I believe each vector store should remain **small and domain-specific**. Instead of placing all knowledge into one large index, the data should be separated by category or domain, with the agent selecting the appropriate retrieval tool when needed. This reduces unnecessary search space, retrieval latency, and irrelevant context.
+
+However, since this is an assignment, I kept this as an **ideal design** and implemented only the retrieval approach required by the assignment.
+![Ideal Design](./assets/ideal_design.png)
+
+---
+
 ## Retrieval Approach
 
 The system uses a lightweight custom RAG mechanism instead of a vector database.
@@ -60,13 +71,14 @@ If no supporting information is available, the system avoids generating unsuppor
 
 ---
 
-## Project Structure
+## Project Structure 
 
 ```text
 .
 ├── assets/
 │   ├── flowchart.png
 │   └── graph_design.png
+│   └── ideal_design.png
 │
 ├── screenshots/
 │   ├── query_01.png
