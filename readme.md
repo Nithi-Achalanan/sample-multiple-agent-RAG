@@ -1,15 +1,176 @@
-# Agentic AI Test
+# Agentic AI RAG System
 
-A small agentic RAG workflow with a keyword search tool, data retriever, and report generator.
+A simple two-agent RAG system built with **LangGraph**.
+
+The system consists of:
+
+* **Report Generator Agent** — receives the user's question and produces the final response.
+* **Data Retrieval Agent** — retrieves relevant information from `knowledge_base.txt`.
+* **`multiple_keyword_search` tool** — performs lightweight keyword-based retrieval from the local knowledge base.
+
+The project demonstrates multi-agent orchestration, custom RAG retrieval, tool calling, and prompt design.
+
+---
+
+## System Architecture and Flowchart
+
+The Report Generator acts as the main agent. When additional information is required, it delegates retrieval to the Data Retrieval Agent.
+
+The Data Retrieval Agent can expand the search query and call `multiple_keyword_search` multiple times until sufficient evidence is found.
+
+![System Flowchart](./assets/flowchart.png)
+
+---
+
+## Graph Engineer 
+
+LangGraph is used to control the workflow between the two agents.
+
+The retrieval process can loop when the Data Retrieval Agent determines that more information is required. Once sufficient evidence has been retrieved, the result is returned to the Report Generator to generate the final response.
+
+![LangGraph Design](./assets/graph_design.png)
+
+---
+
+## Retrieval Approach
+
+The system uses a lightweight custom RAG mechanism instead of a vector database.
+
+The Data Retrieval Agent:
+
+1. Interprets the user's question.
+2. Generates or expands relevant search keywords.
+3. Calls `multiple_keyword_search`.
+4. Reviews the retrieved snippets.
+5. Performs another search if the available evidence is insufficient.
+6. Returns relevant raw snippets to the Report Generator.
+
+The retrieval tool searches sections inside `knowledge_base.txt`, ranks matching sections, and removes duplicate results.
+
+If no supporting information is available, the system avoids generating unsupported facts.
+
+---
+
+## Reliability & Safety Handling
+
+- **Ambiguous queries:** The agent asks a clarifying question when the user's intent is unclear.
+- **No relevant information:** If no supporting evidence is found, the agent clearly states that the knowledge base does not contain enough information.
+- **Out-of-scope queries:** Questions unrelated to the configured knowledge domain are politely declined.
+- **System or retrieval errors:** If an error occurs, the system returns an error code and informs the user that the requested information could not be retrieved.
+
+---
+
+## Project Structure
+
+```text
+.
+├── assets/
+│   ├── flowchart.png
+│   └── graph_design.png
+│
+├── screenshots/
+│   ├── query_01.png
+│   ├── query_02.png
+│   └── query_03.png
+│
+├── src/
+│   ├── main.py
+│   ├── graph.py
+│   ├── agents/
+│   │   ├── report_generator.py
+│   │   └── data_retriever.py
+│   └── tools/
+│       └── multiple_keyword_search.py
+│
+├── knowledge_base.txt
+├── requirements.txt
+├── .env.example
+└── README.md
+```
+
+---
+
+## Knowledge Base
+
+`knowledge_base.txt` is the local source of truth used by the retrieval system.
+
+Example:
+
+```text
+[SECTION: International Travel Policy]
+
+Employees travelling internationally must obtain manager approval
+before booking flights.
+
+---
+
+[SECTION: Travel Expense Policy]
+
+Approved airfare, accommodation, transportation, and meals may be
+reimbursed for approved business travel.
+
+---
+
+[SECTION: Remote Work Policy]
+
+Employees may work remotely for up to two days per week.
+```
+
+---
 
 ## Setup
 
-```bash
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python -m src.main "your question"
+### 1. Clone the repository
+
+### 2. Create a virtual environment
+
+### 3. Install dependencies
+
+### 4. Configure environment variables
+
+Copy `.env.example` to `.env` and provide the required API credentials.
+
+```env
+API_KEY=YOUR_API_KEY
+MODEL_NAME=gpt-5-mini
 ```
 
-Run tests with `pytest`.
+---
 
+## Run
+
+```bash
+python src/main.py
+```
+
+Example question:
+
+```text
+What is the policy on international travel?
+```
+
+---
+
+## Example Results
+
+### Query 01
+
+![Query 01 Result](./screenshots/query_01.png)
+
+### Query 02
+
+![Query 02 Result](./screenshots/query_02.png)
+
+### Query 03
+
+![Query 03 Result](./screenshots/query_03.png)
+
+---
+
+## Tech Stack
+
+* Python
+* LangGraph
+* LangChain
+* OpenAI-compatible LLM API
+* Local text-based knowledge base
