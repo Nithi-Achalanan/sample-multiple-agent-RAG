@@ -1,0 +1,4 @@
+Agentic AI systems coordinate specialized steps to answer questions.
+Retrieval-augmented generation combines retrieved context with generated responses.
+Keyword search is a simple, deterministic baseline for retrieving relevant knowledge.
+
