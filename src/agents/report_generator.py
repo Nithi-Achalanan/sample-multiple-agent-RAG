@@ -58,7 +58,10 @@ def report_generator(state: GraphState) -> dict:
 
     if response.tool_calls:
         return {
-            "tool_calls": response.tool_calls,
+            "summary_agent_state_memory": [
+                *state.get("summary_agent_state_memory", []),
+                response,
+            ],
             "final_report": "",
         }
 

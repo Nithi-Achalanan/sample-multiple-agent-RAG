@@ -132,7 +132,7 @@ def search_tool(state: "GraphState") -> dict:
     search_tool_call = None
 
     for message in reversed(
-        state.get("summary_agent_state_memory", [])
+        state.get("search_agent_state_memory", [])
     ):
         if isinstance(message, AIMessage) and message.tool_calls:
             search_tool_call = message.tool_calls[0]
@@ -140,7 +140,7 @@ def search_tool(state: "GraphState") -> dict:
 
     if search_tool_call is None:
         raise ValueError(
-            "search_agent was called without a tool call from summary_agent"
+            "search_agent was called without a tool call from data_retriever"
         )
 
     keywords = search_tool_call.get("args", {}).get("keywords", [])
@@ -155,7 +155,7 @@ def search_tool(state: "GraphState") -> dict:
             ensure_ascii=False,
         ),
         tool_call_id=search_tool_call["id"],
-        name="search_data",
+        name=search_tool_call["name"],
         artifact=results,
     )
 

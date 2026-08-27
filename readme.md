@@ -12,6 +12,8 @@ The project demonstrates multi-agent orchestration, custom RAG retrieval, tool c
 
 The current implementation is a runnable mock workflow: graph routing and shared-state artifacts are wired end to end, while model calls and knowledge-base retrieval remain deterministic placeholders for later integration.
 
+Tool-call routing follows each agent's own state memory so report and retrieval tool calls reach the correct next node.
+
 ---
 
 ## System Architecture and Flowchart

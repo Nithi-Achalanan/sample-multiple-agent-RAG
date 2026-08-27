@@ -1,7 +1,5 @@
 """LangGraph wiring for the mock retrieval and reporting workflow."""
 
-from typing import Literal
-
 from langgraph.graph import END, START, StateGraph
 
 from src.agents.data_retriever import data_retriever
@@ -9,13 +7,13 @@ from src.agents.report_generator import report_generator
 from src.state import GraphState
 from src.tools.multiple_keyword_search import search_tool
 
-def should_continue(state: GraphState) -> Literal["tool_node", "__end__"]:
+def should_continue(state: GraphState, memory_key: str) -> str:
     """Continue only when the current agent requests one or more tools."""
-    messages = state.get("messages", [])
+    messages = state.get(memory_key, [])
     if not messages:
-        return END # error no message contain in agent state
+        return END
     last_message = messages[-1]
-    if last_message.tool_calls:
+    if getattr(last_message, "tool_calls", None):
         return "route_to_tool_node"
     return END
 
@@ -35,7 +33,9 @@ def build_retrieval_graph():
 
     builder.add_edge(START, "data_retriever")
     builder.add_conditional_edges("data_retriever",
-                                  should_continue,
+                                  lambda state: should_continue(
+                                      state, "search_agent_state_memory"
+                                  ),
                                   ["route_to_tool_node", END]
                                    )
     builder.add_edge("route_to_tool_node", "search_tool")
@@ -51,7 +51,9 @@ def build_main_graph():
 
     builder.add_edge(START, "report_generator")
     builder.add_conditional_edges("report_generator",
-                                  should_continue,
+                                  lambda state: should_continue(
+                                      state, "summary_agent_state_memory"
+                                  ),
                                   ["route_to_tool_node", END]
                                   )
     builder.add_edge("route_to_tool_node", "data_retrieval")
