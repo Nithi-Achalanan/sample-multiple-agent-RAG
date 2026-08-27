@@ -1,9 +1,20 @@
-from dataclasses import dataclass, field
+"""State shared by every node in the mock RAG workflow."""
+
+from typing import TypedDict
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
+from src.tools.multiple_keyword_search import SearchResult
 
 
-@dataclass
-class WorkflowState:
-    query: str
-    retrieved_documents: list[str] = field(default_factory=list)
-    report: str = ""
+class GraphState(TypedDict, total=False):
+    conversation: list[str] = []
+    query: str 
 
+# first agent artifacts
+    summary_agent_state_memory : list[HumanMessage | SystemMessage | ToolMessage | AIMessage] = []
+    final_report: str
+
+# second agent artifacts
+    search_agent_state_memory : list[HumanMessage | SystemMessage | ToolMessage | AIMessage] = []
+    retrieved_context: list[SearchResult] = [] # summary from search_agent 
+    search_attempts: int = 0
+    max_search_attempts: int = 2

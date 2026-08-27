@@ -6,9 +6,11 @@ The system consists of:
 
 * **Report Generator Agent** — receives the user's question and produces the final response.
 * **Data Retrieval Agent** — retrieves relevant information from `knowledge_base.txt`.
-* **`multiple_keyword_search` tool** — performs lightweight keyword-based retrieval from the local knowledge base.
+* **`multiple_keyword_search` tool** — currently returns deterministic mock evidence through the same contract intended for local knowledge-base retrieval.
 
 The project demonstrates multi-agent orchestration, custom RAG retrieval, tool calling, and prompt design.
+
+The current implementation is a runnable mock workflow: graph routing and shared-state artifacts are wired end to end, while model calls and knowledge-base retrieval remain deterministic placeholders for later integration.
 
 ---
 
@@ -43,7 +45,7 @@ However, since this is an assignment, I kept this as an **ideal design** and imp
 
 ---
 
-## Retrieval Approach
+## Planned Retrieval Approach
 
 The system uses a lightweight custom RAG mechanism instead of a vector database.
 
@@ -62,7 +64,7 @@ If no supporting information is available, the system avoids generating unsuppor
 
 ---
 
-## Reliability & Safety Handling
+## Planned Reliability & Safety Handling
 
 - **Ambiguous queries:** The agent asks a clarifying question when the user's intent is unclear.
 - **No relevant information:** If no supporting evidence is found, the agent clearly states that the knowledge base does not contain enough information.
@@ -152,8 +154,12 @@ MODEL_NAME=gpt-5-mini
 ## Run
 
 ```bash
-python src/main.py
+python -m src.main
 ```
+
+The retrieval tool imports the shared graph state only for type checking, avoiding a runtime circular import during application startup.
+
+`search_tool` accepts LangChain-normalized AI tool calls in `GraphState` and returns the retrieval result as a `ToolMessage`.
 
 Example question:
 

@@ -1,2 +1,6 @@
-pytest>=8.0
-
+langgraph
+langchain
+python-dotenv
+langchain_openai
+langchain_groq
+rapidfuzz
