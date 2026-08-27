@@ -169,6 +169,7 @@ def search_tool(state: "GraphState") -> dict:
 
 
 if __name__ == "__main__":
+    #  python -m src.tools.multiple_keyword_search
     state_memory = {
         "summary_agent_state_memory": [
             AIMessage(

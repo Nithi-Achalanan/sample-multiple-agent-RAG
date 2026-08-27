@@ -147,9 +147,10 @@ Employees may work remotely for up to two days per week.
 Copy `.env.example` to `.env` and provide the required API credentials.
 
 ```env
-API_KEY=YOUR_API_KEY
-MODEL_NAME=gpt-5-mini
+GROQ_API_KEY=YOUR_GROQ_API_KEY
 ```
+
+Groq credentials are read from the environment and must not be committed to the repository.
 
 ---
 
