@@ -1,6 +1,7 @@
 """Mock retrieval tool used by the graph wiring."""
-
-from typing import TYPE_CHECKING
+from pathlib import Path
+from typing import TypedDict, TYPE_CHECKING
+from rapidfuzz import fuzz
 
 if TYPE_CHECKING:
     from src.state import GraphState
@@ -11,33 +12,120 @@ from langchain_core.messages import AIMessage, ToolMessage
 class SearchResult(TypedDict):
     content: str
     source: str
-    matched_keywords: list[str]
+    matched_keywords: str
 
+def setup_search(dataset_path: str ) -> list[str]:
+    """
+    Load the knowledge base and split it into searchable documents.
 
-def multiple_keyword_search(keywords: list[str]) -> list[SearchResult]:
-    """Return predictable placeholder evidence until real retrieval is connected."""
-    if not keywords:
-        return []
-    result = """[SECTION: Travel Expense Policy]
-    Title: Travel Expense Policy
+    Each document is separated by '---'.
+    The content is kept as-is without extracting or separating titles.
+    """
+    path = Path(dataset_path)
 
-    Employees may claim reasonable expenses incurred during approved business travel.
+    if not path.exists():
+        raise FileNotFoundError(f"Knowledge base not found: {dataset_path}")
 
-    Reimbursable expenses include airfare, hotel accommodation,
-    local transportation, and meals.
+    content = path.read_text(encoding="utf-8")
 
-    Receipts are required for expenses greater than THB 500.
-
-Expense claims must be submitted within 30 days after the trip."""
-    return [
-        {
-            "content": f"Mock context for: {', '.join(keywords)}",
-            "source": "mock://multiple_keyword_search",
-            "matched_keywords": result,
-        }
+    documents = [
+        document.strip()
+        for document in content.split("---")
+        if document.strip()
     ]
 
+    return documents
 
+def multiple_keyword_search(
+    keywords: list[str],
+    top_K: int = 10,
+    threshold: int = 70,
+    dataset_path = "knowledge_base.txt"
+) -> list[SearchResult]:
+    """
+    Search the knowledge base using fuzzy keyword matching.
+
+    Each keyword is compared against the full document text.
+    Documents are ranked by the average fuzzy-match score
+    of their matched keywords.
+
+    Args:
+        keywords: Keywords to search for.
+        top_K: Maximum number of results to return.
+        threshold: Minimum fuzzy score (0-100) required for a match.
+
+    Returns:
+        Ranked search results.
+    """
+    if not keywords:
+        return []
+
+    documents = setup_search(dataset_path=dataset_path)
+
+    normalized_keywords = list(
+        dict.fromkeys(
+            keyword.strip().lower()
+            for keyword in keywords
+            if keyword.strip()
+        )
+    )
+
+    if not normalized_keywords:
+        return []
+
+    ranked_results = []
+
+    for index, document in enumerate(documents):
+        searchable_text = document.lower()
+
+        matched_keywords = []
+        scores = []
+
+        for keyword in normalized_keywords:
+            score = fuzz.partial_ratio(keyword, searchable_text)
+
+            if score >= threshold:
+                matched_keywords.append(keyword)
+                scores.append(score)
+
+        if not matched_keywords:
+            continue
+
+        average_score = sum(scores) / len(scores)
+
+        ranked_results.append(
+            {
+                "content": document,
+                "source": f"{dataset_path}#section-{index + 1}",
+                "matched_keywords": matched_keywords,
+                "_matched_count": len(matched_keywords),
+                "_score": average_score,
+            }
+        )
+
+    unique_results = {
+        result["content"]: result
+        for result in ranked_results
+    }
+
+    ranked_results = list(unique_results.values())
+
+    ranked_results.sort(
+        key=lambda result: (
+            result["_matched_count"],
+            result["_score"],
+        ),
+        reverse=True,
+    )
+
+    return [
+        {
+            "content": result["content"],
+            "source": result["source"],
+            "matched_keywords": result["matched_keywords"],
+        }
+        for result in ranked_results[:top_K]
+    ]
 
 def search_tool(state: "GraphState") -> dict:
     """Execute retrieval and return the result as a ToolMessage."""
@@ -121,7 +209,7 @@ if __name__ == "__main__":
                 tool_calls=[
                     {
                         "name": "helper_keyword_search",
-                        "args": {"keywords": ["LangGraph", "RAG", "benefits"]},
+                        "args": {"keywords": ["travel"]},
                         "id": "fc_6a337938-e567-41b1-838e-c2778c7b273a",
                         "type": "tool_call",
                     }
