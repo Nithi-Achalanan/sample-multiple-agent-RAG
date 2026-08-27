@@ -1,4 +1,629 @@
-Agentic AI systems coordinate specialized steps to answer questions.
-Retrieval-augmented generation combines retrieved context with generated responses.
-Keyword search is a simple, deterministic baseline for retrieving relevant knowledge.
+[SECTION: International Travel Policy]
+Title: International Travel Policy
 
+Employees who travel internationally for business must obtain approval
+from their direct manager before booking any flights.
+
+Economy class is required for flights shorter than six hours.
+Business class may be approved for flights longer than six hours.
+
+Employees must purchase company-approved travel insurance before departure.
+
+---
+
+[SECTION: Travel Expense Policy]
+Title: Travel Expense Policy
+
+Employees may claim reasonable expenses incurred during approved business travel.
+
+Reimbursable expenses include airfare, hotel accommodation,
+local transportation, and meals.
+
+Receipts are required for expenses greater than THB 500.
+
+Expense claims must be submitted within 30 days after the trip.
+
+---
+
+[SECTION: Domestic Travel Policy]
+Title: Domestic Travel Policy
+
+Domestic business travel must be approved by the employee's manager.
+
+Employees should use company-approved transportation when available.
+
+Hotel accommodation may be reimbursed when an overnight stay is required.
+
+---
+
+[SECTION: Remote Work Policy]
+Title: Remote Work Policy
+
+Employees may work remotely for up to two days per week.
+
+Remote work requires approval from the employee's direct manager.
+
+Employees must remain available during normal working hours
+and attend required meetings.
+
+---
+
+[SECTION: Annual Leave Policy]
+Title: Annual Leave Policy
+
+Full-time employees receive 12 days of paid annual leave per year.
+
+Leave requests of more than three consecutive working days
+should be submitted at least seven days in advance.
+
+All leave requests require manager approval.
+
+---
+
+[SECTION: Employee Insurance]
+Title: Employee Insurance
+
+Full-time employees are covered by the company's group health
+and accident insurance plan.
+
+Coverage begins after the employee completes the probation period.
+
+---
+
+[SECTION: International Travel Policy]
+Title: Passport and Visa Requirements
+
+Employees are responsible for ensuring that their passports remain valid
+for the entire duration of an international business trip.
+
+Required business visas should be arranged before departure.
+
+Reasonable visa application fees may be reimbursed by the company
+when the travel has been approved.
+
+---
+
+[SECTION: International Travel Policy]
+Title: International Flight Booking
+
+International flights should be booked through the company's approved
+travel agency or booking platform.
+
+Employees should make reservations at least 14 days before departure
+whenever practical.
+
+Changes to approved bookings should be reported to the employee's manager.
+
+---
+
+[SECTION: International Travel Policy]
+Title: International Ground Transportation
+
+Employees may use taxis, public transportation, or company-approved
+ride-hailing services while traveling internationally.
+
+Premium transportation services should only be used when necessary
+for safety or business requirements.
+
+Receipts should be retained for reimbursement.
+
+---
+
+[SECTION: International Travel Policy]
+Title: International Travel Changes
+
+Employees should inform their manager as soon as possible
+if an approved international travel itinerary changes.
+
+Additional costs resulting from personal changes to the itinerary
+will normally be the employee's responsibility.
+
+Business-related changes may be reimbursed with manager approval.
+
+---
+
+[SECTION: Travel Expense Policy]
+Title: Business Travel Meal Expenses
+
+Employees may claim reasonable meal expenses while traveling for business.
+
+Alcoholic beverages are not reimbursable unless they are part
+of an approved client entertainment expense.
+
+Itemized receipts are required when the total expense exceeds THB 500.
+
+---
+
+[SECTION: Travel Expense Policy]
+Title: Foreign Currency Expenses
+
+Expenses paid in foreign currencies should be converted to Thai Baht
+when submitting an expense claim.
+
+Employees should use the exchange rate shown on their credit card statement
+or another company-approved exchange rate source.
+
+Supporting documentation should be attached to the claim.
+
+---
+
+[SECTION: Travel Expense Policy]
+Title: Non-Reimbursable Travel Expenses
+
+Personal entertainment, minibar purchases, personal shopping,
+and sightseeing expenses are not reimbursable.
+
+Fines and penalties resulting from an employee's actions
+will not normally be reimbursed.
+
+Exceptions require written approval from the employee's manager.
+
+---
+
+[SECTION: Travel Expense Policy]
+Title: Corporate Card Usage
+
+Employees issued a corporate card should use it for approved
+business travel expenses whenever possible.
+
+Corporate cards must not be used for personal purchases.
+
+Employees are responsible for submitting receipts and supporting documents
+for all corporate card transactions.
+
+---
+
+[SECTION: Domestic Travel Policy]
+Title: Domestic Flight Booking
+
+Employees traveling domestically by air should select
+a reasonably priced economy-class ticket.
+
+Flights should be booked through an approved booking channel.
+
+More expensive flights require justification and manager approval.
+
+---
+
+[SECTION: Domestic Travel Policy]
+Title: Domestic Ground Transportation
+
+Employees should use public transportation, company vehicles,
+or approved transportation services for domestic business travel.
+
+Rental cars may be used when they are more practical or economical.
+
+Rental car expenses require manager approval.
+
+---
+
+[SECTION: Domestic Travel Policy]
+Title: Same-Day Business Travel
+
+Employees are encouraged to complete domestic business trips
+within the same day when practical.
+
+An overnight stay may be approved when the travel schedule,
+distance, or business requirements make same-day return unreasonable.
+
+---
+
+[SECTION: Domestic Travel Policy]
+Title: Domestic Hotel Booking
+
+Hotels for domestic business travel should be selected
+from the company's approved hotel list when available.
+
+Employees should choose standard rooms at reasonable business rates.
+
+Room upgrades for personal preference are not reimbursable.
+
+---
+
+[SECTION: Remote Work Policy]
+Title: Remote Work Location
+
+Employees may work remotely from their registered residence
+or another suitable location approved by their manager.
+
+The remote location must provide reliable internet access
+and an appropriate working environment.
+
+Working from another country requires separate approval.
+
+---
+
+[SECTION: Remote Work Policy]
+Title: Remote Work Equipment
+
+Employees working remotely may use company-provided laptops,
+monitors, and other approved equipment.
+
+Company equipment must be used responsibly and protected
+from loss, theft, or unauthorized access.
+
+Employees should report damaged equipment promptly.
+
+---
+
+[SECTION: Remote Work Policy]
+Title: Remote Work Data Security
+
+Employees working remotely must follow all company information
+security requirements.
+
+Confidential company information should not be accessed
+through unsecured public Wi-Fi networks.
+
+A company-approved VPN must be used when required.
+
+---
+
+[SECTION: Remote Work Policy]
+Title: Remote Work Attendance
+
+Remote employees are expected to attend scheduled online meetings
+and respond to work-related communications during normal working hours.
+
+Employees should update their calendar when they will be unavailable
+for an extended period.
+
+---
+
+[SECTION: Annual Leave Policy]
+Title: Annual Leave Carryover
+
+Employees are encouraged to use their annual leave within
+the year in which it is granted.
+
+Up to five unused annual leave days may be carried forward
+to the following year.
+
+Additional carryover requires HR approval.
+
+---
+
+[SECTION: Annual Leave Policy]
+Title: Peak Period Leave Requests
+
+Managers may limit annual leave during critical business periods
+when sufficient staffing is required.
+
+Employees should submit leave requests as early as possible
+during these periods.
+
+Approval will depend on operational requirements.
+
+---
+
+[SECTION: Annual Leave Policy]
+Title: Half-Day Annual Leave
+
+Employees may request annual leave in half-day increments.
+
+Half-day leave requests must be submitted through
+the normal leave management system.
+
+Manager approval is required before taking the leave.
+
+---
+
+[SECTION: Annual Leave Policy]
+Title: Annual Leave Cancellation
+
+Employees who need to cancel approved annual leave
+should inform their manager as soon as possible.
+
+Cancelled leave days will be returned to the employee's
+available leave balance.
+
+Changes remain subject to manager approval.
+
+---
+
+[SECTION: Employee Insurance]
+Title: Health Insurance Claims
+
+Employees should submit eligible health insurance claims
+according to the insurance provider's procedures.
+
+Required documents may include medical receipts,
+medical certificates, and claim forms.
+
+Employees should contact HR if assistance is required.
+
+---
+
+[SECTION: Employee Insurance]
+Title: Dependent Insurance Coverage
+
+Eligible employees may be offered optional health insurance
+coverage for qualified dependents.
+
+Employees may be responsible for additional premiums
+associated with dependent coverage.
+
+Enrollment conditions are determined by the company's insurance plan.
+
+---
+
+[SECTION: Employee Insurance]
+Title: Insurance Coverage During Leave
+
+Employee insurance coverage normally remains active
+during approved paid leave.
+
+Coverage during extended unpaid leave may be subject
+to different conditions.
+
+Employees should consult HR before beginning extended unpaid leave.
+
+---
+
+[SECTION: Employee Insurance]
+Title: Workplace Accident Insurance
+
+Employees who experience a workplace accident should report
+the incident to their manager and HR as soon as possible.
+
+Medical treatment related to an eligible workplace accident
+may be covered by company insurance.
+
+Required accident reports should be submitted promptly.
+
+---
+
+[SECTION: IT Security Policy]
+Title: Password Security
+
+Employees must use strong passwords for company accounts.
+
+Passwords should not be shared with colleagues
+or reused across personal and company services.
+
+Employees must change compromised passwords immediately.
+
+---
+
+[SECTION: IT Security Policy]
+Title: Multi-Factor Authentication
+
+Multi-factor authentication must be enabled
+for company systems that support it.
+
+Employees should never approve an authentication request
+that they did not initiate.
+
+Suspicious authentication requests must be reported to IT.
+
+---
+
+[SECTION: IT Security Policy]
+Title: Device Encryption
+
+Company laptops and mobile devices containing business data
+must use company-approved encryption.
+
+Employees must not disable encryption or other required
+security controls.
+
+Security issues should be reported to the IT department.
+
+---
+
+[SECTION: IT Security Policy]
+Title: Phishing and Suspicious Emails
+
+Employees should not open suspicious links or attachments
+received through email or messaging platforms.
+
+Suspected phishing messages should be reported
+to the IT security team.
+
+Employees should not provide passwords or authentication codes
+in response to unsolicited requests.
+
+---
+
+[SECTION: Learning and Development Policy]
+Title: Employee Training Budget
+
+Eligible full-time employees may receive an annual budget
+for job-related training and professional development.
+
+Training expenses require manager approval before registration.
+
+Approved expenses may include course fees and training materials.
+
+---
+
+[SECTION: Learning and Development Policy]
+Title: Professional Certification
+
+The company may reimburse fees for professional certifications
+relevant to an employee's current role.
+
+Certification requests must be approved before registration.
+
+Proof of payment and completion may be required for reimbursement.
+
+---
+
+[SECTION: Learning and Development Policy]
+Title: Mandatory Employee Training
+
+Employees must complete mandatory company training
+within the assigned deadline.
+
+Mandatory training may include information security,
+workplace safety, and compliance topics.
+
+Managers are responsible for monitoring completion within their teams.
+
+---
+
+[SECTION: Learning and Development Policy]
+Title: Study Leave
+
+Employees may request study leave to attend
+approved professional training or examinations.
+
+Study leave requires advance approval from the employee's manager.
+
+The number of approved study leave days may depend
+on the relevance of the program to the employee's role.
+
+---
+
+[SECTION: Procurement Policy]
+Title: Purchase Approval
+
+Business purchases must receive appropriate approval
+before an order is placed.
+
+Approval levels depend on the total value of the purchase.
+
+Employees must not divide purchases into smaller transactions
+to avoid approval requirements.
+
+---
+
+[SECTION: Procurement Policy]
+Title: Vendor Quotations
+
+Employees should obtain multiple vendor quotations
+for significant purchases whenever practical.
+
+Price, quality, reliability, and service should be considered
+when selecting a supplier.
+
+The lowest-priced supplier is not automatically required.
+
+---
+
+[SECTION: Procurement Policy]
+Title: Procurement Conflict of Interest
+
+Employees involved in vendor selection must disclose
+any personal or financial relationship with a supplier.
+
+Employees should not participate in procurement decisions
+where a conflict of interest exists.
+
+Potential conflicts should be reported to a manager or compliance team.
+
+---
+
+[SECTION: Procurement Policy]
+Title: Emergency Purchases
+
+Emergency purchases may be made without the normal
+procurement process when immediate action is necessary.
+
+Employees must document the reason for the emergency purchase.
+
+Manager approval should be obtained as soon as practical.
+
+---
+
+[SECTION: Workplace Conduct Policy]
+Title: Respectful Workplace
+
+Employees are expected to communicate professionally
+and treat colleagues, customers, and business partners with respect.
+
+Threatening, abusive, or intentionally disruptive behavior
+is not acceptable in the workplace.
+
+Concerns may be reported to a manager or HR.
+
+---
+
+[SECTION: Workplace Conduct Policy]
+Title: Harassment Prevention
+
+Harassment, bullying, and discrimination are prohibited
+in all company workplaces and work-related activities.
+
+Employees who experience or observe inappropriate behavior
+should report the matter to their manager or HR.
+
+Reports will be handled according to company procedures.
+
+---
+
+[SECTION: Workplace Conduct Policy]
+Title: Workplace Dress Standards
+
+Employees should wear clothing appropriate
+for their role and working environment.
+
+Departments may establish additional dress requirements
+for safety, customer interaction, or professional events.
+
+Employees should consult their manager if they are unsure.
+
+---
+
+[SECTION: Workplace Conduct Policy]
+Title: Alcohol and Substance Use
+
+Employees must not work while impaired by alcohol
+or illegal substances.
+
+Alcohol may only be consumed at company events
+when specifically permitted.
+
+Employees must continue to behave professionally
+during company-sponsored events.
+
+---
+
+[SECTION: Company Equipment Policy]
+Title: Company Laptop Usage
+
+Company laptops are provided primarily for authorized business purposes.
+
+Employees must install only company-approved software
+and follow IT security requirements.
+
+Company laptops should not be shared with unauthorized individuals.
+
+---
+
+[SECTION: Company Equipment Policy]
+Title: Company Mobile Devices
+
+Company-issued phones and tablets must be protected
+with a password, PIN, or biometric authentication.
+
+Employees should keep devices updated with required
+security software.
+
+Lost or stolen devices must be reported immediately.
+
+---
+
+[SECTION: Company Equipment Policy]
+Title: Return of Company Equipment
+
+Employees must return company-owned equipment
+when requested or when their employment ends.
+
+Returned equipment should include laptops, chargers,
+access cards, phones, and other assigned items.
+
+HR or IT will confirm the return of company assets.
+
+---
+
+[SECTION: Company Equipment Policy]
+Title: Lost or Damaged Equipment
+
+Employees must promptly report lost, stolen,
+or damaged company equipment.
+
+The company will assess whether repair or replacement is required.
+
+Employees may be responsible for costs when damage
+results from intentional misuse or serious negligence.
