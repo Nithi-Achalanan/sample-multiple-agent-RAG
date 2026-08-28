@@ -253,3 +253,30 @@ the screenshot is a quick visual record of the run.
 ## Production Evaluation
 
 Before production use, evaluate retrieval against a labeled evaluation set to confirm that relevant chunks are returned. Then evaluate generation against the same set to check answer correctness, grounding, and format before changing the system or model.
+
+---
+
+## Production Handling Considerations
+
+The current project is a small assignment implementation. The following controls would be added for a production deployment.
+
+### LLM API timeouts, retries, and fallback
+
+- Set a request deadline, for example 15 seconds, for each LLM call.
+- Retry only transient failures such as timeouts, connection failures, and `429` responses. Use a small bounded retry count (for example, two retries) with exponential backoff and jitter. Honor the provider's `Retry-After` header when present.
+- When retries are exhausted, open a circuit breaker stored centrally in Redis for the affected provider/model. While the circuit is open, route requests to a configured fallback model or return a clear degraded-service response instead of continuing to call the failing provider.
+
+### Tool failures and malformed data
+
+- Validate tool arguments against a strict JSON schema before execution; reject malformed JSON and do not execute the tool.
+- Return a structured tool error to the supervising agent so it can make one corrected retry or explain that the operation could not be completed.
+- For known malformed outputs from a tool, use a dedicated adapter/normalizer to repair only the expected format. Unknown or unsafe data remains an error rather than being guessed or executed.
+
+### Agent loops and conflicting evidence
+
+- Enforce maximum graph steps and maximum retrieval attempts. Also detect repeated tool calls with the same inputs; stop the workflow with a clear final status instead of consuming unbounded tokens or API calls.
+
+### Conversation memory and context limits
+
+- Choose memory by business case. For short interactions, keep a small recent-message window. For long-running chats, summarize older turns while retaining the most relevant facts and the original evidence references.
+- Apply a context budget before each model call so retrieved chunks and conversation history cannot exceed the model's context window.
