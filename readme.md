@@ -18,9 +18,15 @@ Tool-call routing follows each agent's own state memory so report and retrieval 
 
 ## System Architecture and Flowchart
 
-The Report Generator acts as the main agent. When additional information is required, it delegates retrieval to the Data Retrieval Agent.
+The system uses two agents in sequence. The Report Generator starts with the user question and the Data Retriever supplies the evidence needed to produce a grounded final response.
 
-The Data Retrieval Agent can expand the search query and call `multiple_keyword_search` multiple times until sufficient evidence is found.
+### Report Generator Agent
+
+The Report Generator is the orchestration and answer-synthesis agent. It evaluates the question, can answer simple requests without a retrieval handoff, and uses `helper_search_data` when it needs supporting evidence. For ambiguous policy questions, its prompt directs it to request a broad discovery search before answering or asking a focused clarification question. A retrieval tool call routes directly to the Data Retriever subgraph; when that agent returns, the Report Generator receives the retrieval summary and raw context, then produces the final user-facing answer.
+
+### Data Retriever Agent
+
+The Data Retriever receives the original question and the Report Generator's retrieval request. It expands the request into a focused keyword list and calls `helper_keyword_search`, which routes to the custom `multiple_keyword_search` tool. The tool returns ranked text chunks from the local knowledge base. The Data Retriever reviews the returned evidence and can request another search when it considers the evidence insufficient. When it has finished, it returns both a concise retrieval summary and deduplicated raw chunks to the Report Generator through the shared state.
 
 ![System Flowchart](./assets/flowchart.png)
 
