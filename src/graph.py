@@ -1,5 +1,3 @@
-"""LangGraph wiring for the mock retrieval and reporting workflow."""
-
 from langgraph.graph import END, START, StateGraph
 
 from src.agents.data_retriever import data_retriever
