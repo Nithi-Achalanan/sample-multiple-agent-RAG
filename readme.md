@@ -84,7 +84,7 @@ The file is loaded again for each search. This is sufficient for the small local
 - **No relevant information:** If no supporting evidence is found, the agent clearly states that the knowledge base does not contain enough information.
 - **Out-of-scope queries:** Questions unrelated to the configured knowledge domain are politely declined.
 - **System or retrieval errors:** If an error occurs, the system returns an error code and informs the user that the requested information could not be retrieved.
-- **Tool-use limit (Not implemented yet):** When `search_attempts` exceeds `max_search_attempts`, the intended behavior is to stop the workflow, raise a tool-limit error, show a clear error message, and write the error to the Markdown run log.
+- **Tool-use limit:** When `search_attempts` reaches `max_search_attempts`, the workflow stops, raises a tool-limit error.
 
 ---
 

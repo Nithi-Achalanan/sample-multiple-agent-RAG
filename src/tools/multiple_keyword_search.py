@@ -144,6 +144,9 @@ def search_tool(state: "GraphState") -> dict:
             "search_agent was called without a tool call from data_retriever"
         )
 
+    if state.get("search_attempts", 0) >= state.get("max_search_attempts", 2):
+        raise RuntimeError("Maximum search attempts exceeded")
+
     keywords = search_tool_call.get("args", {}).get("keywords", [])
 
     results = multiple_keyword_search(
