@@ -6,11 +6,11 @@ The system consists of:
 
 * **Report Generator Agent** — receives the user's question and produces the final response.
 * **Data Retrieval Agent** — retrieves relevant information from `knowledge_base.txt`.
-* **`multiple_keyword_search` tool** — currently returns deterministic mock evidence through the same contract intended for local knowledge-base retrieval.
+* **`multiple_keyword_search` tool** — performs local fuzzy keyword retrieval over `knowledge_base.txt` and returns ranked, relevant text chunks.
 
 The project demonstrates multi-agent orchestration, custom RAG retrieval, tool calling, and prompt design.
 
-The current implementation is a runnable mock workflow: graph routing and shared-state artifacts are wired end to end, while model calls and knowledge-base retrieval remain deterministic placeholders for later integration.
+The current implementation is a runnable workflow: LangGraph coordinates the agents, the configured LLM provider handles tool calls and synthesis, and the retrieval tool searches the local knowledge base.
 
 Tool-call routing follows each agent's own state memory so report and retrieval tool calls reach the correct next node.
 
@@ -38,14 +38,17 @@ The retrieval process can loop when the Data Retrieval Agent determines that mor
 
 ## State Artifacts
 
-`GraphState` keeps nine fields in three groups so each agent retains only the
-artifacts needed for the next step of the workflow.
-
-| Group | Fields | How it is used and updated |
-| --- | --- | --- |
-| Shared state | `query`, `conversation`, `search_attempts`, `max_search_attempts` | `main.py` initializes the run. Both agents read `query`; `search_tool` increments `search_attempts` after each local search. `conversation` and `max_search_attempts` are shared control fields reserved for workflow context and the intended search limit. |
-| Report Generator artifacts | `summary_agent_state_memory`, `final_report` | The Report Generator appends its AI tool-call message to `summary_agent_state_memory` when it needs retrieval. After the Retriever returns evidence, it writes the completed user-facing answer to `final_report`. |
-| Data Retriever artifacts | `search_agent_state_memory`, `retrieved_context`, `retrieved_context_raw` | The Retriever records its tool-call and tool-result messages in `search_agent_state_memory`. When retrieval is complete, it stores its short evidence summary in `retrieved_context` and deduplicated raw knowledge-base chunks in `retrieved_context_raw`; both are passed back to the Report Generator and preserved in the Markdown run log. |
+| Field | Stores | Written by | Read by / purpose |
+| --- | --- | --- | --- |
+| `query` | User question | `main.py` / `run_and_log.py` | Both agents use it to retrieve and answer. |
+| `conversation` | Shared conversation list | Entry points initialize it | Reserved shared context; not updated by the current nodes. |
+| `summary_agent_state_memory` | Report Agent messages and retrieval return message | Report Generator; Data Retriever appends the return `ToolMessage` | Data Retriever finds the Report Agent's latest tool request; Report Generator receives its returned evidence. |
+| `final_report` | Final user-facing answer | Report Generator | `main.py` and `run_and_log.py` display or save it. |
+| `search_agent_state_memory` | Retriever messages and local-search tool results | Data Retriever and `search_tool` | `search_tool` finds the latest keyword tool call; Data Retriever reviews prior results. |
+| `retrieved_context` | Retriever's short evidence summary | Data Retriever | 	Report Generator grounds its summary on these chunks; Saved in the Markdown run log. |
+| `retrieved_context_raw` | Deduplicated raw knowledge-base chunks | Data Retriever | Report Generator grounds its answer on these chunks; the run log preserves them. |
+| `search_attempts` | Number of local searches | `search_tool` increments it | Recorded in state; not currently used for routing. |
+| `max_search_attempts` | Intended search limit | Entry points initialize it | Reserved configuration; not currently enforced. |
 
 ---
 
@@ -79,6 +82,12 @@ If no supporting information is available, the system avoids generating unsuppor
 
 ---
 
+## Retrieval Design
+
+`multiple_keyword_search` is a custom local retrieval tool designed for this assignment: on each tool call, it loads `knowledge_base.txt`, splits the file into chunks using `---`, and compares up to five normalized search keywords with every chunk using RapidFuzz `partial_ratio`. A chunk is retained when at least one keyword reaches the similarity threshold of `70`; results are then reranked by the number of matched keywords and their average similarity score, deduplicated by chunk content, and limited to the top 10 results. Each returned chunk preserves its source section and matched keywords so the agents can ground the final answer in the retrieved evidence. Loading and scanning the text file for every query keeps the implementation simple and aligned with the assignment, but a production system would normally cache or index the knowledge base rather than reload it on every search.
+
+---
+
 ## Planned Reliability & Safety Handling
 
 - **Ambiguous queries:** The agent asks a clarifying question when the user's intent is unclear.
@@ -95,28 +104,54 @@ If no supporting information is available, the system avoids generating unsuppor
 .
 ├── assets/
 │   ├── flowchart.png
-│   └── graph_design.png
+│   ├── graph_design.png
 │   └── ideal_design.png
 │
+├── result/
+│   ├── normal.md
+│   ├── multi_section.md
+│   ├── ambiguity.md
+│   ├── ambiguity_2.md
+│   ├── unsupported_but_in_domain.md
+│   └── out_of_scope.md
+│
 ├── screenshots/
-│   ├── query_01.png
-│   ├── query_02.png
-│   └── query_03.png
+│   ├── normal.png
+│   ├── multi_section.png
+│   ├── ambiguity.png
+│   ├── ambiguity_2.png
+│   ├── unsupported_but_in_domain.png
+│   └── out_of_scope.png
 │
 ├── src/
-│   ├── main.py
-│   ├── graph.py
 │   ├── agents/
 │   │   ├── report_generator.py
 │   │   └── data_retriever.py
-│   └── tools/
+│   ├── tools/
 │       └── multiple_keyword_search.py
+│   ├── graph.py
+│   ├── main.py
+│   ├── run_and_log.py
+│   └── state.py
 │
 ├── knowledge_base.txt
 ├── requirements.txt
 ├── .env.example
 └── README.md
 ```
+
+---
+
+## System Map
+
+| System part | What it does | Key files |
+| --- | --- | --- |
+| Answer generation | Interprets the question, requests evidence when needed, and produces the final response. | [`report_generator.py`](./src/agents/report_generator.py) |
+| Information retrieval | Expands the retrieval request, reviews search results, and returns evidence to the answer generator. | [`data_retriever.py`](./src/agents/data_retriever.py) |
+| Workflow | Connects the answer and retrieval steps in a LangGraph flow. | [`graph.py`](./src/graph.py) |
+| Local search | Finds, ranks, and deduplicates relevant text chunks. | [`multiple_keyword_search.py`](./src/tools/multiple_keyword_search.py) |
+| Knowledge source | Stores the policy sections searched by the retrieval tool. | [`knowledge_base.txt`](./knowledge_base.txt) |
+| Run evidence | Preserves representative runs, including input, output, and retrieval context. | [`result/`](./result/) |
 
 ---
 
@@ -204,17 +239,18 @@ Logs are saved to the ignored `run_logs/` directory.
 
 ## Current Test Results
 
-Each result file records the input, final response, retrieval-agent response,
-and raw retrieved context. Screenshots can be added alongside these cases.
+Each scenario has a full Markdown log and a matching screenshot. The log shows
+the input, final answer, retrieval-agent response, and raw retrieved context;
+the screenshot is a quick visual record of the run.
 
-| Scenario | Input | Response format | Result log |
-| --- | --- | --- | --- |
-| Normal retrieval | `Do I need manager approval before an international business flight?` | Direct evidence-grounded answer, followed by key policy points. | [normal.md](./result/normal.md) |
-| Multi-section retrieval | `What expenses can I claim for an approved international trip, and what receipts are needed?` | Direct answer with a comparison table of claimable expenses, receipt requirements, and known gaps. | [multi_section.md](./result/multi_section.md) |
-| Broad policy query | `What is the travel policy?` | Consolidated policy overview structured by topic, using retrieved domestic and international travel sections. | [ambiguity_2.md](./result/ambiguity_2.md) |
-| Ambiguous request without context | `can you serch me the policy?` | Concise clarification request that asks the user to identify the policy domain. | [ambiguity.md](./result/ambiguity.md) |
-| Unsupported but in-domain | `What is the maternity leave policy?` | States that the knowledge base has no reliable maternity-leave policy, then asks for the missing scope and details. | [unsupported_but_in_domain.md](./result/unsupported_but_in_domain.md) |
-| Out of scope | `What is the weather in Bangkok tomorrow?` | States that no weather forecast is available in the current data and asks for clarification rather than inventing an answer. | [out_of_scope.md](./result/out_of_scope.md) |
+| Scenario | Input | Response format | Full log | Screenshot |
+| --- | --- | --- | --- | --- |
+| Normal retrieval | `Do I need manager approval before an international business flight?` | Direct evidence-grounded answer, followed by key policy points. | [normal.md](./result/normal.md) | [View screenshot](./screenshots/normal.png) |
+| Multi-section retrieval | `What expenses can I claim for an approved international trip, and what receipts are needed?` | Direct answer with a comparison table of claimable expenses, receipt requirements, and known gaps. | [multi_section.md](./result/multi_section.md) | [View screenshot](./screenshots/multi_section.png) |
+| Broad policy query | `What is the travel policy?` | Consolidated policy overview structured by topic, using retrieved domestic and international travel sections. | [ambiguity_2.md](./result/ambiguity_2.md) | [View screenshot](./screenshots/ambiguity_2.png) |
+| Ambiguous request without context | `can you serch me the policy?` | Concise clarification request that asks the user to identify the policy domain. | [ambiguity.md](./result/ambiguity.md) | [View screenshot](./screenshots/ambiguity.png) |
+| Unsupported but in-domain | `What is the maternity leave policy?` | States that the knowledge base has no reliable maternity-leave policy, then asks for the missing scope and details. | [unsupported_but_in_domain.md](./result/unsupported_but_in_domain.md) | [View screenshot](./screenshots/unsupported_but_in_domain.png) |
+| Out of scope | `What is the weather in Bangkok tomorrow?` | States that no weather forecast is available in the current data and asks for clarification rather than inventing an answer. | [out_of_scope.md](./result/out_of_scope.md) | [View screenshot](./screenshots/out_of_scope.png) |
 
 ---
 
