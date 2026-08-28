@@ -1,5 +1,5 @@
 # Agentic AI RAG System
-This repo was created entirely by Nithi Achalanan individually 
+This repo was created entirely by Nithi Achalanan individually.<br>
 A simple two-agent RAG system built with **LangGraph**.
 
 The system consists of:
