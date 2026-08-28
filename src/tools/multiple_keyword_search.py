@@ -1,4 +1,3 @@
-"""Mock retrieval tool used by the graph wiring."""
 from pathlib import Path
 from typing import TypedDict, TYPE_CHECKING
 from rapidfuzz import fuzz

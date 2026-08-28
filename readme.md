@@ -74,7 +74,7 @@ However, since this is an assignment, I kept this as an **ideal design** and imp
 5. Rank results by matched-keyword count and average similarity score.
 6. Remove duplicate content and return the top 10 sections with their source and matched keywords.
 
-The file is loaded again for each search. This is sufficient for the small local knowledge base used here. I just use as a basic search :); a larger system would normally cache or index the content.
+The file is loaded again for each search. This is sufficient for the small local knowledge base used here.; a larger system would normally cache or index the content.
 
 ---
 
