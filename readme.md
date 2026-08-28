@@ -36,6 +36,19 @@ The retrieval process can loop when the Data Retrieval Agent determines that mor
 
 ---
 
+## State Artifacts
+
+`GraphState` keeps nine fields in three groups so each agent retains only the
+artifacts needed for the next step of the workflow.
+
+| Group | Fields | How it is used and updated |
+| --- | --- | --- |
+| Shared state | `query`, `conversation`, `search_attempts`, `max_search_attempts` | `main.py` initializes the run. Both agents read `query`; `search_tool` increments `search_attempts` after each local search. `conversation` and `max_search_attempts` are shared control fields reserved for workflow context and the intended search limit. |
+| Report Generator artifacts | `summary_agent_state_memory`, `final_report` | The Report Generator appends its AI tool-call message to `summary_agent_state_memory` when it needs retrieval. After the Retriever returns evidence, it writes the completed user-facing answer to `final_report`. |
+| Data Retriever artifacts | `search_agent_state_memory`, `retrieved_context`, `retrieved_context_raw` | The Retriever records its tool-call and tool-result messages in `search_agent_state_memory`. When retrieval is complete, it stores its short evidence summary in `retrieved_context` and deduplicated raw knowledge-base chunks in `retrieved_context_raw`; both are passed back to the Report Generator and preserved in the Markdown run log. |
+
+---
+
 ## Ideal Graph Design
 
 In a real-world implementation, I would likely prefer a **grep-based / file-based RAG approach** for this use case. Recent research suggests that it can outperform traditional vector retrieval in several scenarios, especially when the searchable knowledge base is relatively small and well-structured.
@@ -72,6 +85,7 @@ If no supporting information is available, the system avoids generating unsuppor
 - **No relevant information:** If no supporting evidence is found, the agent clearly states that the knowledge base does not contain enough information.
 - **Out-of-scope queries:** Questions unrelated to the configured knowledge domain are politely declined.
 - **System or retrieval errors:** If an error occurs, the system returns an error code and informs the user that the requested information could not be retrieved.
+- **Tool-use limit (Not implemented yet):** When `search_attempts` exceeds `max_search_attempts`, the intended behavior is to stop the workflow, raise a tool-limit error, show a clear error message, and write the error to the Markdown run log.
 
 ---
 
