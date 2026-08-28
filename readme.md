@@ -170,6 +170,17 @@ Example question:
 What is the policy on international travel?
 ```
 
+## Run with Markdown Logs
+
+To save each run as a Markdown record, including the input, final response,
+retrieval-agent responses, and raw retrieved context, run:
+
+```bash
+python -m src.run_and_log
+```
+
+Logs are saved to the ignored `run_logs/` directory.
+
 ---
 
 ## Example Results
