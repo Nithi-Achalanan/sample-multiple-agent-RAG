@@ -252,7 +252,9 @@ the screenshot is a quick visual record of the run.
 
 ## Production Evaluation
 
-Before production use, evaluate retrieval against a labeled evaluation set to confirm that relevant chunks are returned. Then evaluate generation against the same set to check answer correctness, grounding, and format before changing the system or model.
+- Before production use, evaluate retrieval against a labeled evaluation set to confirm that relevant chunks are returned. Then evaluate generation against the same set to check answer correctness, grounding, and format before changing the system or model.
+
+- For AI-specific monitoring, sample 1% of successful runs for review. Capture every failed run with its complete state artifacts and error cause so it can be backfilled into the evaluation set and traced to the retrieval or generation step that failed.
 
 ---
 
