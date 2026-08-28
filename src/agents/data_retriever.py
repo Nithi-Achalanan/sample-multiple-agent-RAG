@@ -56,14 +56,10 @@ def data_retriever(state: GraphState) -> dict:
             break
 
     if summary_tool_call is None:
-        # raise ValueError(
-        #     "search_agent was called without a tool call from summary_agent"
-        # )
-        summary_tool_call = {
-            "id": "mock_tool_call_id",
-            "name": "mock_tool_name",
-            "args": {"keywords": ["mock_keyword"]},
-        }
+        raise ValueError(
+            "search_agent was called without a tool call from summary_agent"
+        )
+
     search_agent = setup_search_agent()
     messages = [
             SystemMessage(
