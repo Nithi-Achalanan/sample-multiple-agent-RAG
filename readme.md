@@ -8,12 +8,6 @@ The system consists of:
 * **Data Retrieval Agent** — retrieves relevant information from `knowledge_base.txt`.
 * **`multiple_keyword_search` tool** — performs local fuzzy keyword retrieval over `knowledge_base.txt` and returns ranked, relevant text chunks.
 
-The project demonstrates multi-agent orchestration, custom RAG retrieval, tool calling, and prompt design.
-
-The current implementation is a runnable workflow: LangGraph coordinates the agents, the configured LLM provider handles tool calls and synthesis, and the retrieval tool searches the local knowledge base.
-
-Tool-call routing follows each agent's own state memory so report and retrieval tool calls reach the correct next node.
-
 ---
 
 ## System Architecture and Flowchart
@@ -32,7 +26,7 @@ The Data Retriever receives the original question and the Report Generator's ret
 
 ---
 
-## Graph Engineer 
+## Graph Orchestration
 
 LangGraph is used to control the workflow between the two agents.
 
@@ -51,7 +45,7 @@ The retrieval process can loop when the Data Retrieval Agent determines that mor
 | `summary_agent_state_memory` | Report Agent messages and retrieval return message | Report Generator; Data Retriever appends the return `ToolMessage` | Data Retriever finds the Report Agent's latest tool request; Report Generator receives its returned evidence. |
 | `final_report` | Final user-facing answer | Report Generator | `main.py` and `run_and_log.py` display or save it. |
 | `search_agent_state_memory` | Retriever messages and local-search tool results | Data Retriever and `search_tool` | `search_tool` finds the latest keyword tool call; Data Retriever reviews prior results. |
-| `retrieved_context` | Retriever's short evidence summary | Data Retriever | 	Report Generator grounds its summary on these chunks; Saved in the Markdown run log. |
+| `retrieved_context` | Retriever's short evidence summary | Data Retriever | Saved in the Markdown run log. |
 | `retrieved_context_raw` | Deduplicated raw knowledge-base chunks | Data Retriever | Report Generator grounds its answer on these chunks; the run log preserves them. |
 | `search_attempts` | Number of local searches | `search_tool` increments it | Recorded in state; not currently used for routing. |
 | `max_search_attempts` | Intended search limit | Entry points initialize it | Reserved configuration; not currently enforced. |
@@ -69,28 +63,18 @@ However, since this is an assignment, I kept this as an **ideal design** and imp
 
 ---
 
-## Planned Retrieval Approach
-
-The system uses a lightweight custom RAG mechanism instead of a vector database.
-
-The Data Retrieval Agent:
-
-1. Interprets the user's question.
-2. Generates or expands relevant search keywords.
-3. Calls `multiple_keyword_search`.
-4. Reviews the retrieved snippets.
-5. Performs another search if the available evidence is insufficient.
-6. Returns relevant raw snippets to the Report Generator.
-
-The retrieval tool searches sections inside `knowledge_base.txt`, ranks matching sections, removes duplicate results, and passes unique raw retrieval artifacts to the summary agent alongside the retrieval summary.
-
-If no supporting information is available, the system avoids generating unsupported facts.
-
----
-
 ## Retrieval Design
 
-`multiple_keyword_search` is a custom local retrieval tool designed for this assignment: on each tool call, it loads `knowledge_base.txt`, splits the file into chunks using `---`, and compares up to five normalized search keywords with every chunk using RapidFuzz `partial_ratio`. A chunk is retained when at least one keyword reaches the similarity threshold of `70`; results are then reranked by the number of matched keywords and their average similarity score, deduplicated by chunk content, and limited to the top 10 results. Each returned chunk preserves its source section and matched keywords so the agents can ground the final answer in the retrieved evidence. Loading and scanning the text file for every query keeps the implementation simple and aligned with the assignment, but a production system would normally cache or index the knowledge base rather than reload it on every search.
+`multiple_keyword_search` uses a simple local-file retrieval pipeline:
+
+1. Load `knowledge_base.txt` and split it into sections using `---`.
+2. Normalize and keep up to five keywords from the Data Retriever.
+3. Compare each keyword with every section using RapidFuzz `partial_ratio`.
+4. Keep sections with a similarity score of at least `70`.
+5. Rank results by matched-keyword count and average similarity score.
+6. Remove duplicate content and return the top 10 sections with their source and matched keywords.
+
+The file is loaded again for each search. This is sufficient for the small local knowledge base used here. I just use as a basic search :); a larger system would normally cache or index the content.
 
 ---
 
@@ -134,7 +118,7 @@ If no supporting information is available, the system avoids generating unsuppor
 │   │   ├── report_generator.py
 │   │   └── data_retriever.py
 │   ├── tools/
-│       └── multiple_keyword_search.py
+│   │   └── multiple_keyword_search.py
 │   ├── graph.py
 │   ├── main.py
 │   ├── run_and_log.py
@@ -220,10 +204,6 @@ OpenAI API key and a larger OpenAI model instead. Set `OPENAI_API_KEY` in
 python -m src.main
 ```
 
-The retrieval tool imports the shared graph state only for type checking, avoiding a runtime circular import during application startup.
-
-`search_tool` accepts LangChain-normalized AI tool calls in `GraphState` and returns the retrieval result as a `ToolMessage`.
-
 Example question:
 
 ```text
@@ -239,7 +219,7 @@ retrieval-agent responses, and raw retrieved context, run:
 python -m src.run_and_log
 ```
 
-Logs are saved to the ignored `run_logs/` directory.
+Logs are saved to the `run_logs/` directory.
 
 ---
 
