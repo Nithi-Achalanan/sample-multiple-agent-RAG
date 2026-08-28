@@ -24,7 +24,7 @@ def setup_report_generator_agent():
     llm = ChatGroq(
         model="openai/gpt-oss-20b",
         temperature=0,
-        api_key = os.getenv("GROQ_API_KEY")
+        api_key = os.getenv("GROQ_API_KEY"),
         )
 
     return llm.bind_tools([helper_search_data])
@@ -52,7 +52,8 @@ def report_generator(state: GraphState) -> dict:
         HumanMessage(
             content=(
                 f"User query:\n{state.get('query', '')}\n\n"
-                f"state memory : {state.get('summary_agent_state_memory', [])}"
+                f"state memory : {state.get('summary_agent_state_memory', [])}\n\n"
+                f"Retrieved context raw:\n{state.get('retrieved_context_raw', [])}"
             )
         ),
     ]
@@ -62,6 +63,7 @@ def report_generator(state: GraphState) -> dict:
     print("Response:", response)
     print("Content:", response.content)
     print("Tool calls:", response.tool_calls)
+    print("\n")
 
     if response.tool_calls:
         return {

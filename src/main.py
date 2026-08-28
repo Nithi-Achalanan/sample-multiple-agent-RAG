@@ -17,6 +17,7 @@ def main() -> None:
             "conversation": [],
             "keywords": [],
             "retrieved_context": [],
+            "retrieved_context_raw": [],
             "final_report": "",
             "needs_more_search": False,
             "retrieval_complete": False,

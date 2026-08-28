@@ -15,6 +15,7 @@ class GraphState(TypedDict, total=False):
 
 # second agent artifacts
     search_agent_state_memory : list[HumanMessage | SystemMessage | ToolMessage | AIMessage] = []
-    retrieved_context: list[SearchResult] = [] # summary from search_agent 
+    retrieved_context: list = [] # summary from search_agent 
+    retrieved_context_raw : list[SearchResult] = [] # raw search result from search_agent
     search_attempts: int = 0
     max_search_attempts: int = 2

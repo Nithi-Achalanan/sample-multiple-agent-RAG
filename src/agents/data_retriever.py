@@ -113,12 +113,31 @@ def data_retriever(state: GraphState) -> dict:
         }
     
 # case 2
+    retrieved_context_raw = list(state.get("retrieved_context_raw", []))
+    seen_raw_context = {
+        (item.get("source"), item.get("content"))
+        for item in retrieved_context_raw
+    }
+
+    for message in state.get("search_agent_state_memory", []):
+        if not isinstance(message, ToolMessage) or not isinstance(message.artifact, list):
+            continue
+
+        for item in message.artifact:
+            if not isinstance(item, dict):
+                continue
+
+            identity = (item.get("source"), item.get("content"))
+            if identity not in seen_raw_context:
+                retrieved_context_raw.append(item)
+                seen_raw_context.add(identity)
+
     tool_message = ToolMessage(
         content=response.content,
 
         tool_call_id=summary_tool_call["id"],
         name=summary_tool_call["name"],
-        artifact=response.content,
+        artifact=retrieved_context_raw,
     )
 
     return {
@@ -131,6 +150,8 @@ def data_retriever(state: GraphState) -> dict:
             *state.get("retrieved_context", []),
             response.content,
         ],
+
+        "retrieved_context_raw": retrieved_context_raw,
 
         "summary_agent_state_memory": [
             *state.get("summary_agent_state_memory", []),

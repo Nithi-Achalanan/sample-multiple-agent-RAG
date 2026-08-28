@@ -60,7 +60,7 @@ The Data Retrieval Agent:
 5. Performs another search if the available evidence is insufficient.
 6. Returns relevant raw snippets to the Report Generator.
 
-The retrieval tool searches sections inside `knowledge_base.txt`, ranks matching sections, and removes duplicate results.
+The retrieval tool searches sections inside `knowledge_base.txt`, ranks matching sections, removes duplicate results, and passes unique raw retrieval artifacts to the summary agent alongside the retrieval summary.
 
 If no supporting information is available, the system avoids generating unsupported facts.
 

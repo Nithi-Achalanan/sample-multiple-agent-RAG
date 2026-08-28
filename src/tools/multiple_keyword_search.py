@@ -40,7 +40,8 @@ def multiple_keyword_search(
     keywords: list[str],
     top_K: int = 10,
     threshold: int = 70,
-    dataset_path = "knowledge_base.txt"
+    dataset_path = "knowledge_base.txt",
+    max_keywords: int = 5,
 ) -> list[SearchResult]:
     """
     Search the knowledge base using fuzzy keyword matching.
@@ -59,7 +60,7 @@ def multiple_keyword_search(
     """
     if not keywords:
         return []
-
+    keywords = keywords[:max_keywords]
     documents = setup_search(dataset_path=dataset_path)
 
     normalized_keywords = list(
