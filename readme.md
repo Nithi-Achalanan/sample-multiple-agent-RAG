@@ -148,9 +148,14 @@ Copy `.env.example` to `.env` and provide the required API credentials.
 
 ```env
 GROQ_API_KEY=YOUR_GROQ_API_KEY
+# Optional: OPENAI_API_KEY=YOUR_OPENAI_API_KEY
 ```
 
 Groq credentials are read from the environment and must not be committed to the repository.
+
+For higher-quality results, the two agent files can be configured to use an
+OpenAI API key and a larger OpenAI model instead. Set `OPENAI_API_KEY` in
+`.env`, then update both agents to select the OpenAI provider.
 
 ---
 
@@ -183,19 +188,19 @@ Logs are saved to the ignored `run_logs/` directory.
 
 ---
 
-## Example Results
+## Current Test Results
 
-### Query 01
+Each result file records the input, final response, retrieval-agent response,
+and raw retrieved context. Screenshots can be added alongside these cases.
 
-![Query 01 Result](./screenshots/query_01.png)
-
-### Query 02
-
-![Query 02 Result](./screenshots/query_02.png)
-
-### Query 03
-
-![Query 03 Result](./screenshots/query_03.png)
+| Scenario | Input | Response format | Result log |
+| --- | --- | --- | --- |
+| Normal retrieval | `Do I need manager approval before an international business flight?` | Direct evidence-grounded answer, followed by key policy points. | [normal.md](./result/normal.md) |
+| Multi-section retrieval | `What expenses can I claim for an approved international trip, and what receipts are needed?` | Direct answer with a comparison table of claimable expenses, receipt requirements, and known gaps. | [multi_section.md](./result/multi_section.md) |
+| Broad policy query | `What is the travel policy?` | Consolidated policy overview structured by topic, using retrieved domestic and international travel sections. | [ambiguity_2.md](./result/ambiguity_2.md) |
+| Ambiguous request without context | `can you serch me the policy?` | Concise clarification request that asks the user to identify the policy domain. | [ambiguity.md](./result/ambiguity.md) |
+| Unsupported but in-domain | `What is the maternity leave policy?` | States that the knowledge base has no reliable maternity-leave policy, then asks for the missing scope and details. | [unsupported_but_in_domain.md](./result/unsupported_but_in_domain.md) |
+| Out of scope | `What is the weather in Bangkok tomorrow?` | States that no weather forecast is available in the current data and asks for clarification rather than inventing an answer. | [out_of_scope.md](./result/out_of_scope.md) |
 
 ---
 
