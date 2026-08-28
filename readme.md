@@ -1,5 +1,5 @@
 # Agentic AI RAG System
-
+This repo was created entirely by Nithi Achalanan individually 
 A simple two-agent RAG system built with **LangGraph**.
 
 The system consists of:
@@ -229,7 +229,7 @@ Each scenario has a full Markdown log and a matching screenshot. The log shows
 the input, final answer, retrieval-agent response, and raw retrieved context;
 the screenshot is a quick visual record of the run.
 
-| Scenario | Input | Response format | Full log | Screenshot |
+| Scenario | Input | Response sample | Full log | Screenshot |
 | --- | --- | --- | --- | --- |
 | Normal retrieval | `Do I need manager approval before an international business flight?` | Direct evidence-grounded answer, followed by key policy points. | [normal.md](./result/normal.md) | [View screenshot](./screenshots/normal.png) |
 | Multi-section retrieval | `What expenses can I claim for an approved international trip, and what receipts are needed?` | Direct answer with a comparison table of claimable expenses, receipt requirements, and known gaps. | [multi_section.md](./result/multi_section.md) | [View screenshot](./screenshots/multi_section.png) |
@@ -247,3 +247,9 @@ the screenshot is a quick visual record of the run.
 * LangChain
 * OpenAI-compatible LLM API
 * Local text-based knowledge base
+
+---
+
+## Production Evaluation
+
+Before production use, evaluate retrieval against a labeled evaluation set to confirm that relevant chunks are returned. Then evaluate generation against the same set to check answer correctness, grounding, and format before changing the system or model.
