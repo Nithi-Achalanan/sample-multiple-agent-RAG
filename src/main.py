@@ -4,7 +4,8 @@ from src.graph import graph
 
 
 def main() -> None:
-    """Run the graph with a user query and print the final response."""
+    
+    #  python -m  src.main          
     query = input("Ask a question: ").strip()
 
     if not query:

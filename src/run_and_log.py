@@ -101,4 +101,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    # python -m src.run_and_log   
     main()
